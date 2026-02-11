@@ -15,4 +15,9 @@ yarn-debug.log*
 
 # Environment Variables
 .env
+.env.development
+.env.production
 !.env.example
+
+# Neon Local metadata
+.neon_local/
