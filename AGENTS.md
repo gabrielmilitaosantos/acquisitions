@@ -55,7 +55,7 @@ src/
 
 **Authentication Flow**:
 - User data validated with Zod schemas in `src/validations/`
-- Passwords hashed with bcrypt (10 rounds) in auth.services.js
+- Passwords hashed with bcrypt (10 rounds) in auth.service.js
 - JWT tokens signed with 1-day expiration
 - Tokens stored in httpOnly cookies (15 min maxAge, secure in production)
 
