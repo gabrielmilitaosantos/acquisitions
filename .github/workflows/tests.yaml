@@ -1,0 +1,59 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, stagging]
+  pull_request:
+    branches: [main, stagging]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        env:
+          NODE_ENV: test
+          NODE_OPTIONS: --experimental-vm-modules
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://test:test@localhost:5432/test_db' }}
+        run: |
+          if ! npm test; then
+            echo "::error title=Test Failures::Some tests failed. Check the test output above for details."
+            exit 1
+          fi
+
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: coverage/
+          retention-days: 30
+
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "## Test Results 🧪" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f coverage/lcov-report/index.html ]; then
+            echo "✅ Tests completed with coverage report generated" >> $GITHUB_STEP_SUMMARY
+            echo "📊 Coverage reports have been uploaded as artifacts" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Tests completed but coverage report not found" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Coverage Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "Coverage reports are available as workflow artifacts for 30 days." >> $GITHUB_STEP_SUMMARY

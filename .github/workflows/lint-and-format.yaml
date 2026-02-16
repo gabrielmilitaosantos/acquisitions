@@ -1,0 +1,38 @@
+name: Lint and Format
+
+on:
+  push:
+    branches: [main, stagging]
+  pull_request:
+    branches: [main, stagging]
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: |
+          if ! npm run lint; then
+            echo "::error title=ESLint Issues Found::ESLint found issues in your code. Run 'npm run lint:fix' to automatically fix many of these issues."
+            exit 1
+          fi
+
+      - name: Run Prettier check
+        run: |
+          if ! npm run format:check; then
+            echo "::error title=Prettier Format Issues::Code formatting issues found. Run 'npm run format' to fix formatting."
+            exit 1
+          fi

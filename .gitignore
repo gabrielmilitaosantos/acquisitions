@@ -21,3 +21,7 @@ yarn-debug.log*
 
 # Neon Local metadata
 .neon_local/
+
+# Coverage reports
+/coverage
+*.lcov
