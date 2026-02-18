@@ -85,14 +85,46 @@ src/
 
 **Completed**:
 
+**Authentication & Authorization**:
+
 - User signup endpoint (`POST /api/auth/sign-up`) with email uniqueness validation
-- JWT token generation and cookie-based storage
-- Database schema for users table with role-based access (user/admin)
+- User sign-in endpoint (`POST /api/auth/sign-in`) with credential verification
+- User sign-out endpoint (`POST /api/auth/sign-out`) with cookie clearing
+- JWT token generation and httpOnly cookie-based storage
+- Authentication middleware (`authenticateToken`) for protected routes
+- Role-based authorization middleware (`requireRole`, `requireAdmin`)
 
-**In Progress**:
+**User Management (CRUD)**:
 
-- Sign-in and sign-out endpoints exist as route stubs but lack controller logic
-- No authentication middleware yet for protected routes
+- Get all users endpoint (`GET /api/users`) - admin only
+- Get user by ID endpoint (`GET /api/users/:id`) - authenticated users
+- Update user endpoint (`PUT /api/users/:id`) - with authorization checks
+- Delete user endpoint (`DELETE /api/users/:id`) - with safeguards for last admin
+- Users can update/delete their own accounts, admins can manage any user
+- Only admins can modify user roles
+
+**Security**:
+
+- Arcjet integration for DDoS protection, bot detection, and rate limiting
+- Security middleware with Helmet for HTTP headers protection
+- CORS configuration for cross-origin requests
+
+**Testing**:
+
+- Basic health check and API endpoint tests configured
+- Jest testing framework setup with ES modules support
+
+**CI/CD & DevOps**:
+
+- GitHub Actions workflows for linting, formatting, and testing
+- Docker configuration (development and production)
+- Docker Hub automated builds and pushes
+
+**Database**:
+
+- PostgreSQL via Neon serverless with Drizzle ORM
+- Users table schema with role-based access (user/admin)
+- Migration system configured
 
 ## Development Notes
 
