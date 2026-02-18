@@ -1,6 +1,14 @@
 import logger from '../config/logger.js';
-import { getAllUsers, getUserById, updateUser, deleteUser } from '../services/users.service.js';
-import { userIdSchema, updateUserSchema } from '../validations/users.validation.js';
+import {
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+} from '../services/users.service.js';
+import {
+  userIdSchema,
+  updateUserSchema,
+} from '../validations/users.validation.js';
 import { formatValidationError } from '../utils/format.js';
 
 export const fetchAllUsers = async (req, res, next) => {
@@ -41,11 +49,11 @@ export const fetchUserById = async (req, res, next) => {
     });
   } catch (error) {
     logger.error('Error getting user by ID:', error);
-    
+
     if (error.message === 'User not found') {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     next(error);
   }
 };
@@ -77,7 +85,7 @@ export const updateUserById = async (req, res, next) => {
     if (req.user.role !== 'admin' && req.user.id !== id) {
       return res.status(403).json({
         error: 'Forbidden',
-        message: 'You can only update your own information'
+        message: 'You can only update your own information',
       });
     }
 
@@ -85,7 +93,7 @@ export const updateUserById = async (req, res, next) => {
     if (updates.role && req.user.role !== 'admin') {
       return res.status(403).json({
         error: 'Forbidden',
-        message: 'Only administrators can change user roles'
+        message: 'Only administrators can change user roles',
       });
     }
 
@@ -99,15 +107,15 @@ export const updateUserById = async (req, res, next) => {
     });
   } catch (error) {
     logger.error('Error updating user:', error);
-    
+
     if (error.message === 'User not found') {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     if (error.message === 'Email already exists') {
       return res.status(409).json({ error: 'Email already exists' });
     }
-    
+
     next(error);
   }
 };
@@ -129,7 +137,7 @@ export const deleteUserById = async (req, res, next) => {
     if (req.user.role !== 'admin' && req.user.id !== id) {
       return res.status(403).json({
         error: 'Forbidden',
-        message: 'You can only delete your own account'
+        message: 'You can only delete your own account',
       });
     }
 
@@ -137,11 +145,11 @@ export const deleteUserById = async (req, res, next) => {
     if (req.user.role === 'admin' && req.user.id === id) {
       const allUsers = await getAllUsers();
       const adminCount = allUsers.filter(user => user.role === 'admin').length;
-      
+
       if (adminCount <= 1) {
         return res.status(403).json({
           error: 'Forbidden',
-          message: 'Cannot delete the last admin account'
+          message: 'Cannot delete the last admin account',
         });
       }
     }
@@ -156,11 +164,11 @@ export const deleteUserById = async (req, res, next) => {
     });
   } catch (error) {
     logger.error('Error deleting user:', error);
-    
+
     if (error.message === 'User not found') {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     next(error);
   }
 };

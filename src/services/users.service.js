@@ -21,7 +21,7 @@ export const getAllUsers = async () => {
   }
 };
 
-export const getUserById = async (id) => {
+export const getUserById = async id => {
   try {
     const [user] = await db
       .select({
@@ -51,7 +51,7 @@ export const updateUser = async (id, updates) => {
   try {
     // First check if user exists
     const existingUser = await getUserById(id);
-    
+
     if (!existingUser) {
       throw new Error('User not found');
     }
@@ -63,7 +63,7 @@ export const updateUser = async (id, updates) => {
         .from(users)
         .where(eq(users.email, updates.email))
         .limit(1);
-      
+
       if (emailUser && emailUser.id !== id) {
         throw new Error('Email already exists');
       }
@@ -72,9 +72,9 @@ export const updateUser = async (id, updates) => {
     // Update the user
     const [updatedUser] = await db
       .update(users)
-      .set({ 
-        ...updates, 
-        updated_at: new Date() 
+      .set({
+        ...updates,
+        updated_at: new Date(),
       })
       .where(eq(users.id, id))
       .returning({
@@ -98,11 +98,11 @@ export const updateUser = async (id, updates) => {
   }
 };
 
-export const deleteUser = async (id) => {
+export const deleteUser = async id => {
   try {
     // First check if user exists
     const existingUser = await getUserById(id);
-    
+
     if (!existingUser) {
       throw new Error('User not found');
     }

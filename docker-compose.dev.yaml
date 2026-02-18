@@ -14,7 +14,7 @@ services:
     networks:
       - acquisitions-dev
     healthcheck:
-      test: [ "CMD", "pg_isready", "-h", "localhost", "-p", "5432", "-U", "neon" ]
+      test: ['CMD', 'pg_isready', '-h', 'localhost', '-p', '5432', '-U', 'neon']
       interval: 5s
       timeout: 3s
       retries: 5

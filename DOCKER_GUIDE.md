@@ -3,6 +3,7 @@
 This guide explains how to run the Acquisitions API using Docker with Neon Database for both development and production environments.
 
 ## Table of Contents
+
 - [Prerequisites](#prerequisites)
 - [Architecture Overview](#architecture-overview)
 - [Development Setup (with Neon Local)](#development-setup-with-neon-local)
@@ -26,6 +27,7 @@ This guide explains how to run the Acquisitions API using Docker with Neon Datab
 ## Architecture Overview
 
 ### Development Environment
+
 ```
 ┌─────────────────────────────────────────┐
 │  Docker Compose (dev)                   │
@@ -48,6 +50,7 @@ This guide explains how to run the Acquisitions API using Docker with Neon Datab
 ```
 
 ### Production Environment
+
 ```
 ┌─────────────────────────────────────────┐
 │  Docker Compose (prod)                  │
@@ -132,6 +135,7 @@ docker-compose -f docker-compose.dev.yaml --env-file .env.development up --build
 ```
 
 The application will start with:
+
 - **App** running on `http://localhost:3000`
 - **Neon Local** proxy on `localhost:5432`
 - An **ephemeral database branch** created automatically
@@ -164,6 +168,7 @@ docker-compose -f docker-compose.dev.yaml down
 ```
 
 This will:
+
 - Stop all containers
 - Remove containers and networks
 - Delete the ephemeral database branch (if `DELETE_BRANCH=true`)
@@ -249,28 +254,28 @@ docker-compose -f docker-compose.prod.yaml down
 
 ### Common Variables (Both Environments)
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `PORT` | Application port | `3000` |
-| `NODE_ENV` | Environment mode | `development` |
-| `LOG_LEVEL` | Logging level | `info` |
-| `JWT_SECRET` | JWT signing secret | *(required)* |
+| Variable     | Description        | Default       |
+| ------------ | ------------------ | ------------- |
+| `PORT`       | Application port   | `3000`        |
+| `NODE_ENV`   | Environment mode   | `development` |
+| `LOG_LEVEL`  | Logging level      | `info`        |
+| `JWT_SECRET` | JWT signing secret | _(required)_  |
 
 ### Development-Only Variables (Neon Local)
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `NEON_API_KEY` | Neon API key | ✅ Yes | - |
-| `NEON_PROJECT_ID` | Neon project ID | ✅ Yes | - |
-| `PARENT_BRANCH_ID` | Parent branch for ephemeral branches | No | `main` |
-| `DELETE_BRANCH` | Auto-delete branch on stop | No | `true` |
-| `DATABASE_NAME` | Database name | No | `neondb` |
+| Variable           | Description                          | Required | Default  |
+| ------------------ | ------------------------------------ | -------- | -------- |
+| `NEON_API_KEY`     | Neon API key                         | ✅ Yes   | -        |
+| `NEON_PROJECT_ID`  | Neon project ID                      | ✅ Yes   | -        |
+| `PARENT_BRANCH_ID` | Parent branch for ephemeral branches | No       | `main`   |
+| `DELETE_BRANCH`    | Auto-delete branch on stop           | No       | `true`   |
+| `DATABASE_NAME`    | Database name                        | No       | `neondb` |
 
 ### Production-Only Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `DATABASE_URL` | Full Neon Cloud connection string | ✅ Yes |
+| Variable       | Description                       | Required |
+| -------------- | --------------------------------- | -------- |
+| `DATABASE_URL` | Full Neon Cloud connection string | ✅ Yes   |
 
 ---
 
@@ -313,6 +318,7 @@ Then open `https://local.drizzle.studio` in your browser.
 ### Issue: "Cannot connect to Neon Local"
 
 **Solution**:
+
 1. Ensure Neon Local container is healthy:
    ```bash
    docker-compose -f docker-compose.dev.yaml ps
@@ -326,6 +332,7 @@ Then open `https://local.drizzle.studio` in your browser.
 ### Issue: "Branch not found" or "Project not found"
 
 **Solution**:
+
 - Verify your `NEON_PROJECT_ID` matches your actual project ID from the Neon Console
 - Ensure your `PARENT_BRANCH_ID` exists (usually `main`)
 
@@ -337,6 +344,7 @@ This is expected with Neon Local. The application is already configured to handl
 ### Issue: Database connection timeout in production
 
 **Solution**:
+
 1. Verify your `DATABASE_URL` is correct
 2. Check Neon Console for database status
 3. Ensure your production database allows connections from your deployment IP
@@ -345,6 +353,7 @@ This is expected with Neon Local. The application is already configured to handl
 
 **Solution**:
 The development setup already mounts your source code as a volume. Ensure you're using:
+
 ```bash
 docker-compose -f docker-compose.dev.yaml up
 ```
@@ -378,16 +387,19 @@ docker-compose -f docker-compose.prod.yaml down -v
 ## Quick Reference
 
 ### Start Development
+
 ```bash
 docker-compose -f docker-compose.dev.yaml --env-file .env.development up
 ```
 
 ### Start Production
+
 ```bash
 docker-compose -f docker-compose.prod.yaml --env-file .env.production up -d
 ```
 
 ### Run Migrations
+
 ```bash
 # Dev
 docker-compose -f docker-compose.dev.yaml exec app npm run db:migrate
@@ -397,6 +409,7 @@ docker-compose -f docker-compose.prod.yaml exec app npm run db:migrate
 ```
 
 ### View Logs
+
 ```bash
 # Dev
 docker-compose -f docker-compose.dev.yaml logs -f
@@ -406,6 +419,7 @@ docker-compose -f docker-compose.prod.yaml logs -f
 ```
 
 ### Stop Everything
+
 ```bash
 # Dev
 docker-compose -f docker-compose.dev.yaml down
@@ -428,6 +442,7 @@ docker-compose -f docker-compose.prod.yaml down
 **Need Help?**
 
 If you encounter issues not covered in this guide, please:
+
 1. Check the container logs: `docker-compose logs`
 2. Verify your environment variables are correct
 3. Consult the [Neon Discord](https://discord.gg/neon) or [GitHub Issues](https://github.com/neondatabase/neon/issues)

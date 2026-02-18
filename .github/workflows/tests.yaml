@@ -46,14 +46,14 @@ jobs:
         if: always()
         run: |
           echo "## Test Results 🧪" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ -f coverage/lcov-report/index.html ]; then
             echo "✅ Tests completed with coverage report generated" >> $GITHUB_STEP_SUMMARY
             echo "📊 Coverage reports have been uploaded as artifacts" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚠️ Tests completed but coverage report not found" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Coverage Artifacts" >> $GITHUB_STEP_SUMMARY
           echo "Coverage reports are available as workflow artifacts for 30 days." >> $GITHUB_STEP_SUMMARY
